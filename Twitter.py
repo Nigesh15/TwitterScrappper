@@ -6,6 +6,14 @@ import datetime
 import time
 import streamlit as st
 
+def custom_download_button(filename, extension, data):
+    return st.download_button(
+        label=f"Download data as {extension.upper()}",
+        data=data,
+        file_name=f"{filename}.{extension}",
+        mime=f"text/{extension}",
+    )
+
 st.set_page_config(page_title = "Twitter",layout="wide")
 st.title("TWITTER SCRAPPER")
 search = st.text_input("Scrape Tweets with Keyword/Hashtag", placeholder="Enter the Keyword or Hashtag")
@@ -44,17 +52,7 @@ if search is not "":
         st.write("Data Uploaded to MongoDB successfully.")
 
     csv = tweets_df1.to_csv(index=False)
-    st.download_button(
-        label="Download data as CSV",
-        data=csv,
-        file_name=f'{search}.csv',
-        mime='text/csv',
-    )
+    custom_download_button(search, "csv", csv)
 
     json = tweets_df1.to_json()
-    st.download_button(
-        label="Download data as JSON",
-        data=json,
-        file_name=f'{search}.json',
-        mime='text/json',
-    )
+    custom_download_button(search, "json", json)
